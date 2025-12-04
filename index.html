@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Management System </title>
+  <style>
+    :root{
+      --gap: 1rem;
+      --card-bg: #ffffff;
+      --accent:#0b5ed7;
+      --muted:#666;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, Arial, sans-serif;
+      background: linear-gradient(180deg,#f6f9ff 0%, #ffffff 100%);
+      padding:1.25rem;
+      color:#111;
+    }
+    .container{
+      max-width:1000px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:var(--gap);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.5rem;
+    }
+    h1{margin:.25rem 0; font-size:1.25rem}
+    p.lead{margin:0;color:var(--muted); font-size:.95rem}
+
+    .card{
+      background:var(--card-bg);
+      padding:1rem;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(12,20,40,0.06);
+    }
+
+    form.form-grid{
+      display:grid;
+      gap:.75rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width:720px){
+      form.form-grid{grid-template-columns: 1fr;}
+    }
+    label{display:block; font-size:.9rem; margin-bottom:.35rem}
+    input[type="text"], input[type="email"], input[type="tel"], select{
+      width:100%;
+      padding:.5rem .65rem;
+      border:1px solid #e6e9ee;
+      border-radius:8px;
+      font-size:.95rem;
+    }
+
+    .radio-row{
+      display:flex; gap:1rem; align-items:center; padding-top:.25rem;
+    }
+
+    .actions{
+      display:flex;
+      gap:.6rem;
+      margin-top:.5rem;
+    }
+
+    button{
+      padding:.55rem .9rem;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    button:active{transform:translateY(1px)}
+    .btn-primary{ background:var(--accent); color:white; box-shadow:0 6px 18px rgba(11,94,215,0.12); }
+    .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 14px 30px rgba(11,94,215,0.14); }
+
+    .btn-ghost{ background:transparent; border:1px solid #ddd; color:#222; }
+    .btn-ghost:hover{ transform:translateY(-2px) }
+
+    /* Table */
+    .table-wrap{ overflow:auto; margin-top:.75rem }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:680px;
+    }
+    th, td{
+      padding:.65rem .5rem;
+      text-align:left;
+      border-bottom:1px solid #f0f2f6;
+      font-size:.95rem;
+    }
+    thead th{ font-size:.95rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.03em; font-weight:700; background:#fafbfd; position:sticky; top:0; z-index:1}
+    tbody tr:nth-child(odd){ background: #ffffff; }
+    tbody tr:nth-child(even){ background: #f7f9ff; } /* alternating rows */
+
+    .small-muted{ font-size:.85rem; color:var(--muted) }
+
+    .right{ text-align:right }
+    .action-btn{
+      padding:.35rem .55rem;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn-delete{ background:#ff6b6b; color:white; }
+    .btn-delete:hover{ transform:translateY(-2px) }
+
+    .status{
+      display:inline-block;
+      padding:.2rem .45rem;
+      border-radius:999px;
+      font-size:.8rem;
+      color:white;
+      background: #20c997;
+    }
+
+    footer{ text-align:center; color:var(--muted); font-size:.9rem; margin-top:1rem }
+
+    /* small helper */
+    .flex{display:flex;gap:.5rem;align-items:center}
+    .spacer{flex:1}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Student Management System </h1>  
+      </div>
+      
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="formTitle">
+        <h2 id="formTitle" style="margin:0 0 .5rem 0">Add Student</h2>
+        <form id="studentForm" class="form-grid" autocomplete="off">
+          <div>
+            <label for="name">Student Name *</label>
+            <input id="name" name="name" type="text" placeholder="Full name" required />
+          </div>
+          <div>
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="email" placeholder="student@example.com" required />
+          </div>
+          <div>
+            <label for="mobile">Mobile Number *</label>
+            <input id="mobile" name="mobile" type="tel" placeholder="10-digit mobile" required />
+          </div>
+          <div>
+            <label for="course">Course *</label>
+            <select id="course" name="course" required>
+              <option value=""> Select course </option>
+              <option>BCA</option>
+              <option>BSc CS</option>
+              <option>MCA</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div style="grid-column: 1 / -1">
+            <label>Gender *</label>
+            <div class="radio-row">
+              <label><input type="radio" name="gender" value="Male" required /> Male</label>
+              <label><input type="radio" name="gender" value="Female" required /> Female</label>
+              <label><input type="radio" name="gender" value="Other" required /> Other</label>
+            </div>
+          </div>
+
+          <div style="grid-column: 1 / -1; display:flex; align-items:center; gap:.6rem; margin-top:.25rem">
+            <div class="actions">
+              <button type="submit" class="btn-primary">Submit</button>
+              <button type="button" id="clearBtn" class="btn-ghost">Clear</button>
+            </div>
+            
+        </form>
+      </section>
+
+      <section class="card">
+        <h2 style="margin:0 0 .5rem 0">Students</h2>
+        <div class="table-wrap">
+          <table id="studentsTable" aria-live="polite">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Course</th>
+                <th>Gender</th>
+                <th class="right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    
+  </div>
+
+<script>
+  const API_BASE = 'http://localhost:3000'; // backend base URL
+  const STATUS_BANNER = document.getElementById('serverStatus');
+
+  // Utilities
+  function q(sel){ return document.querySelector(sel) }
+  function showStatus(text, ok=true){
+    STATUS_BANNER.textContent = text;
+    STATUS_BANNER.style.background = ok ? '#20c997' : '#ff6b6b';
+  }
+
+  // localStorage keys
+  const LS_KEY = 'sms_local_students_v1';
+
+  // In-memory list used for UI rendering
+  let students = [];
+
+  // DOM refs
+  const form = document.getElementById('studentForm');
+  const tbody = document.querySelector('#studentsTable tbody');
+  const clearBtn = document.getElementById('clearBtn');
+
+  // Basic validations
+  function validateForm(data){
+    if(!data.name || !data.email || !data.mobile || !data.course || !data.gender) return 'Please fill all fields';
+    if(!/^[0-9]{10}$/.test(data.mobile)) return 'Mobile must be 10 digits';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return 'Invalid email';
+    return null;
+  }
+
+  // Render table
+  function render(){
+    tbody.innerHTML = '';
+    students.forEach((s, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${i+1}</td>
+        <td>${escapeHtml(s.name)}</td>
+        <td>${escapeHtml(s.email)}</td>
+        <td>${escapeHtml(s.mobile)}</td>
+        <td>${escapeHtml(s.course)}</td>
+        <td>${escapeHtml(s.gender)}</td>
+        <td class="right">
+          <button data-id="${s.id}" class="action-btn btn-delete">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Escape to avoid injection
+  function escapeHtml(str){ return String(str).replace(/[&<>"']/g, function(m){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m]}) }
+
+  // Save to localStorage fallback
+  function saveLS(){
+    localStorage.setItem(LS_KEY, JSON.stringify(students));
+  }
+  function loadLS(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return [];
+      return JSON.parse(raw);
+    }catch(e){ return [] }
+  }
+
+  // Check backend alive
+  async function checkBackend(){
+    try{
+      const r = await fetch(API_BASE + '/health', {method:'GET', cache:'no-store'});
+      if(r.ok) { showStatus('Backend: online'); return true; }
+    }catch(e){}
+    showStatus('Backend: offline', false);
+    return false;
+  }
+
+  // Fetch students from backend (or fallback to localStorage)
+  async function fetchStudents(){
+    const alive = await checkBackend();
+    if(!alive){
+      students = loadLS();
+      render();
+      return;
+    }
+    try{
+      const res = await fetch(API_BASE + '/students');
+      if(!res.ok) throw new Error('Failed');
+      const data = await res.json();
+      students = data;
+      render();
+      saveLS(); // keep LS synced
+    }catch(err){
+      // fallback
+      students = loadLS();
+      render();
+    }
+  }
+
+  // Add student via API or localStorage fallback
+  async function addStudent(student){
+    const alive = await checkBackend();
+    if(!alive){
+      // give local id
+      student.id = 'ls_' + Date.now();
+      students.push(student);
+      saveLS();
+      render();
+      return { ok:true, source:'local' };
+    }
+    try{
+      const r = await fetch(API_BASE + '/students', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(student)
+      });
+      if(!r.ok) {
+        const err = await r.json().catch(()=>({message:'server error'}));
+        return { ok:false, error:err.message || 'Server rejected' };
+      }
+      const res = await r.json();
+      // append returned student object
+      students.push(res);
+      saveLS();
+      render();
+      return { ok:true, source:'server' };
+    }catch(e){
+      // fallback
+      student.id = 'ls_' + Date.now();
+      students.push(student);
+      saveLS();
+      render();
+      return { ok:true, source:'local' };
+    }
+  }
+
+  // Delete student
+  async function deleteStudent(id){
+    const alive = await checkBackend();
+    if(!alive){
+      students = students.filter(s => s.id !== id);
+      saveLS();
+      render();
+      return { ok:true, source:'local' };
+    }
+    try{
+      const r = await fetch(API_BASE + '/students/' + encodeURIComponent(id), { method:'DELETE' });
+      if(r.status === 404) return { ok:false, error:'Not found' };
+      if(!r.ok) throw new Error('delete failed');
+      students = students.filter(s => s.id !== id);
+      saveLS();
+      render();
+      return { ok:true, source:'server' };
+    }catch(e){
+      // fallback local delete
+      students = students.filter(s => s.id !== id);
+      saveLS();
+      render();
+      return { ok:true, source:'local' };
+    }
+  }
+
+  // Form submit handler
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault(); // no page reload
+    const data = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      mobile: form.mobile.value.trim(),
+      course: form.course.value,
+      gender: form.gender.value
+    };
+    const err = validateForm(data);
+    if(err){ alert(err); return; }
+
+    // disable submit while adding
+    const submitBtn = form.querySelector('button[type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Adding...';
+
+    const result = await addStudent(data);
+    if(!result.ok){
+      alert('Failed to add: ' + (result.error || 'Unknown'));
+    } else {
+      // clear form
+      form.reset();
+      // small visual confirmation
+      if(result.source === 'server') showStatus('Added via backend');
+      else showStatus('Added to local storage', false);
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
+  });
+
+  clearBtn.addEventListener('click', ()=> form.reset());
+
+  // Delete via event delegation
+  tbody.addEventListener('click', async (ev) => {
+    const btn = ev.target.closest('button[data-id]');
+    if(!btn) return;
+    const id = btn.dataset.id;
+    if(!confirm('Delete this student?')) return;
+    btn.disabled = true;
+    const res = await deleteStudent(id);
+    if(!res.ok) alert('Delete failed: ' + (res.error || 'Unknown'));
+    btn.disabled = false;
+  });
+
+  // Periodically check backend connectivity
+  setInterval(checkBackend, 8000);
+
+  // initial load
+  fetchStudents();
+
+</script>
+</body>
+</html>
